@@ -1871,3 +1871,46 @@ run(function()
         Default = false
 	})
 end)
+
+run(function()
+	local FakeLag = {Enabled = false}
+	local FakeLagFPS = {Value = 10}
+	local FakeLagFPS2 = {Value = 10}
+
+	FakeLag = vape.windows.blatant.CreateOptionsButton({
+		Name = "FakeLag",
+		Function = function(callback)
+			if callback then
+				task.spawn(function()
+					repeat
+					task.wait()
+						pcall(function()
+							entityLibrary.character.HumanoidRootPart.Anchored = true
+							task.wait(FakeLagFPS.Value/200)
+							entityLibrary.character.HumanoidRootPart.Anchored = false
+							task.wait(FakeLagFPS2.Value/200)
+						end)
+					until (not FakeLag.Enabled)
+				end)
+			else
+				entityLibrary.character.HumanoidRootPart.Anchored = false
+			end
+		end,
+		HoverText = "Fakes lag",
+		ExtraText = function() return FakeLagFPS.Value end
+	})
+	FakeLagFPS = FakeLag.CreateSlider({
+		Name = "FPS Start",
+		Min = 1,
+		Max = 30,
+		Default = 30,
+		Function = function(val) end
+	})
+	FakeLagFPS2 = FakeLag.CreateSlider({
+		Name = "FPS End",
+		Min = 1,
+		Max = 30,
+		Default = 30,
+		Function = function(val) end
+	})
+end)
